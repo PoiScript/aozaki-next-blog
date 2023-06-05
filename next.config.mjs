@@ -55,48 +55,51 @@ export default withNextra({
   },
 
   // Security Headers
-  async headers() {
-    return [
-      {
-        source: '/(.*)',
-        headers: securityHeaders
-      }
-    ]
-  },
-
-  // Fix Routing by Redirecting
-  async redirects() {
-    return [
-      {
-        source: '/posts/kanaut-nishe-goods-1',
-        destination: '/posts/kanaut-nishe-merch',
-        permanent: true
-      },
-      {
-        source: '/blog/:slug*',
-        destination: '/posts/:slug*',
-        permanent: true
-      },
-      {
-        source: '/portfoilo/:slug*',
-        destination: '/photography/:slug*',
-        permanent: true
-      },
-      {
-        source: '/about',
-        destination: '/',
-        permanent: true
-      },
-      {
-        source: '/desk-new-layout',
-        destination: '/posts/new-desktop-layout',
-        permanent: true
-      },
-      {
-        source: '/bladerunner-revisit',
-        destination: '/posts/bladerunner-revisit',
-        permanent: true
-      }
-    ]
-  }
+  ...(process.env.CF_PAGES === 'true'
+    ? { output: 'export' } // Disables the redirects for Cloudflare Pages
+    : {
+        async headers() {
+          return [
+            {
+              source: '/(.*)',
+              headers: securityHeaders
+            }
+          ]
+        },
+        // Fix Routing by Redirecting
+        async redirects() {
+          return [
+            {
+              source: '/posts/kanaut-nishe-goods-1',
+              destination: '/posts/kanaut-nishe-merch',
+              permanent: true
+            },
+            {
+              source: '/blog/:slug*',
+              destination: '/posts/:slug*',
+              permanent: true
+            },
+            {
+              source: '/portfoilo/:slug*',
+              destination: '/photography/:slug*',
+              permanent: true
+            },
+            {
+              source: '/about',
+              destination: '/',
+              permanent: true
+            },
+            {
+              source: '/desk-new-layout',
+              destination: '/posts/new-desktop-layout',
+              permanent: true
+            },
+            {
+              source: '/bladerunner-revisit',
+              destination: '/posts/bladerunner-revisit',
+              permanent: true
+            }
+          ]
+        }
+      })
 })
